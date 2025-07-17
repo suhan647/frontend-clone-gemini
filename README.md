@@ -99,39 +99,8 @@ This project simulates a Gemini-style conversational AI chat app with OTP login,
 
 ---
 
-## 📸 Screenshots
-
-*Add screenshots of the login, dashboard, chatroom, and mobile views here.*
-
----
-
-## 🌐 Deployment
-
-- **TODO:** Deploy to Vercel or Netlify and add the live link above.
-
----
-
 ## 📚 Additional Notes
 
 - All chat and auth data is simulated and stored client-side.
 - No backend is required for this assignment.
 - For any missing features or improvements, see TODOs in this README.
-
----
-
-## 📩 Submission
-
-- Email your submission and your updated resume to hr@kuvaka.io with the subject:
-  > Gemini Frontend Clone Assignment Submission - Kuvaka Tech [Your Full Name]
-- Include:
-  - GitHub Repository Link
-  - Live Deployment Link (Vercel/Netlify)
-  - Any additional notes or credentials if needed
-
----
-
-## TODOs
-- [ ] Add live deployment link
-- [ ] Add screenshots
-- [ ] Improve accessibility (ARIA, keyboard navigation)
-- [ ] (Optional) Polish UI/UX further

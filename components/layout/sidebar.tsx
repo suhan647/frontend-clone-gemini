@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, Plus, Search, Settings, HelpCircle, MessageSquare, Sparkles, Heart, Trash2 } from 'lucide-react'
 import { useChatStore } from '@/store/chat'
 import { useAuthStore } from '@/store/auth'
 import { formatDate, generateId } from '@/lib/utils'
 import { Chatroom } from '@/types'
+import { LoginForm } from '@/components/auth/login-form'
 
 export function Sidebar() {
   const { 
@@ -19,13 +20,19 @@ export function Sidebar() {
   } = useChatStore()
   const { user } = useAuthStore()
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const [pendingNewChat, setPendingNewChat] = useState(false)
 
   const filteredChatrooms = chatrooms.filter(room => 
     room.title.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const handleNewChat = () => {
-    if (!user) return
+    if (!user) {
+      setShowLogin(true)
+      setPendingNewChat(true)
+      return
+    }
     
     const newChatroom: Chatroom = {
       id: generateId(),
@@ -37,6 +44,27 @@ export function Sidebar() {
     
     addChatroom(newChatroom)
     setCurrentChatroom(newChatroom.id)
+  }
+
+  useEffect(() => {
+    if (pendingNewChat && user) {
+      setPendingNewChat(false)
+      const newChatroom: Chatroom = {
+        id: generateId(),
+        title: 'New Chat',
+        lastMessageTime: new Date(),
+        createdAt: new Date(),
+        userId: user.id
+      }
+      addChatroom(newChatroom)
+      setCurrentChatroom(newChatroom.id)
+      setShowLogin(false)
+    }
+  }, [pendingNewChat, user])
+
+  const handleLoginSuccess = () => {
+    setShowLogin(false)
+    // No need to create chat here, useEffect will handle it
   }
 
   return (
@@ -79,6 +107,21 @@ export function Sidebar() {
             <span className="text-[var(--gemini-text-secondary)] group-hover:text-[var(--gemini-text-primary)]">New chat</span>
           )}
         </button>
+        {/* Login Modal */}
+        {showLogin && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="relative">
+              <LoginForm onLoginSuccess={handleLoginSuccess} />
+              <button
+                className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                onClick={() => setShowLogin(false)}
+                aria-label="Close login modal"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       {/* Explore Gems */}
       {!isCollapsed && (

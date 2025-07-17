@@ -24,7 +24,7 @@ const otpSchema = z.object({
 type PhoneFormData = z.infer<typeof phoneSchema>
 type OTPFormData = z.infer<typeof otpSchema>
 
-export function LoginForm() {
+export function LoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = {}) {
   const { user, isLoading, countries, setUser, setLoading, setCountries } = useAuthStore()
   const [step, setStep] = useState<'phone' | 'otp'>('phone')
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
@@ -117,6 +117,7 @@ export function LoginForm() {
       setUser(newUser)
       setLoading(false)
       toast.success('Login successful!')
+      if (onLoginSuccess) onLoginSuccess()
     }, 2000)
   }
   
@@ -150,6 +151,9 @@ export function LoginForm() {
           <p className="text-gray-600 dark:text-gray-400">
             {step === 'phone' ? 'Enter your phone number to continue' : 'Enter the verification code'}
           </p>
+          {step === 'otp' && (
+            <p className="text-blue-600 dark:text-blue-400 mt-2">For this demo, use OTP: <b>123456</b></p>
+          )}
         </div>
         
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">

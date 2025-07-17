@@ -10,14 +10,9 @@ import { MobileSidebar } from '@/components/chat/mobile-sidebar'
 import { useState } from 'react'
 
 export default function Home() {
-  const { user } = useAuthStore()
+  // Remove forced login check
   const [isOpen, setIsOpen] = useState(false)
-  
-  // Show login form if not authenticated
-  if (!user?.isAuthenticated) {
-    return <LoginForm />
-  }
-  
+
   return (
     <div className="h-screen flex bg-[var(--gemini-bg)] overflow-hidden">
       {/* Sidebar for md and above */}
