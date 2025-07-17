@@ -6,7 +6,7 @@ A fully functional, responsive, and visually appealing frontend for a Gemini-sty
 
 ## 🚀 Live Demo
 
-**Live URL:** [Add your deployed Vercel/Netlify link here]
+**Live URL:** https://frontend-clone-gemini.vercel.app/
 
 ---
 
