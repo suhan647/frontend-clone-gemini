@@ -44,10 +44,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-[#e3e3e3] font-medium text-sm">
+            <span className="font-medium text-sm" style={{ color: 'var(--gemini-text-primary)' }}>
               {message.isUser ? 'You' : 'Gemini'}
             </span>
-            <span className="text-[#9aa0a6] text-xs">
+            <span className="text-xs" style={{ color: 'var(--gemini-text-secondary)' }}>
               {formatTime(message.timestamp)}
             </span>
           </div>
@@ -58,14 +58,14 @@ export function ChatMessage({ message }: ChatMessageProps) {
               <img
                 src={message.image}
                 alt="Uploaded content"
-                className="max-w-md rounded-lg border border-[#3c4043]"
+                className="max-w-md rounded-lg border" style={{ borderColor: 'var(--gemini-border)' }}
               />
             </div>
           )}
 
           {/* Text content */}
           <div className="message-content">
-            <div className="text-[#e3e3e3] leading-relaxed whitespace-pre-wrap">
+            <div className="leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--gemini-text-primary)' }}>
               {message.content}
             </div>
           </div>

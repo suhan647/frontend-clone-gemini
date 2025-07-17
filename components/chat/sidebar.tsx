@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { Chatroom } from '@/types'
 
-export function Sidebar() {
+export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open: boolean) => void }) {
   const { 
     chatrooms, 
     currentChatroom, 
@@ -51,6 +51,7 @@ export function Sidebar() {
     
     addChatroom(newChatroom)
     setCurrentChatroom(newChatroom.id)
+    if (setMobileSidebarOpen && window.innerWidth < 1024) setMobileSidebarOpen(false);
     toast.success('New chat created')
   }
   
@@ -67,52 +68,73 @@ export function Sidebar() {
   }
   
   return (
-    <div className="w-80 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full">
+    <div className="w-80 border-r border-gray-200 flex flex-col h-full text-[var(--gemini-text-primary)]" style={{ background: 'var(--gemini-sidebar)' }}>
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Gemini</h1>
+          <h1 className="text-xl font-semibold text-[var(--gemini-text-primary)]">Gemini</h1>
           <div className="flex items-center gap-2">
             <button
-              onClick={toggleDarkMode}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              title={isDarkMode ? 'Light mode' : 'Dark mode'}
-            >
-              {isDarkMode ? (
-                <Sun className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              )}
-            </button>
+  onClick={toggleDarkMode}
+  className="hidden lg:p-2 lg:flex hover:bg-[#23232a] rounded-lg transition-colors"
+  title={isDarkMode ? 'Light mode' : 'Dark mode'}
+>
+  {isDarkMode ? (
+    <Sun className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
+  ) : (
+    <Moon className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
+  )}
+</button>
             <button
               onClick={handleLogout}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#23232a] rounded-lg transition-colors"
               title="Logout"
             >
-              <LogOut className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <LogOut className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
             </button>
           </div>
         </div>
         
         <button
           onClick={handleNewChat}
-          className="w-full flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors group"
+          className="w-full flex items-center gap-3 p-3 bg-[#23232a] hover:bg-[#23232a]/80 rounded-lg transition-colors group"
         >
-          <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          <span className="text-blue-600 dark:text-blue-400 font-medium">New Chat</span>
+          <Plus className="w-5 h-5 text-[var(--gemini-text-secondary)] group-hover:text-[var(--gemini-text-primary)]" />
+          <span className="text-[var(--gemini-text-secondary)] group-hover:text-[var(--gemini-text-primary)] font-medium">New Chat</span>
         </button>
       </div>
       
       {/* Search */}
       <div className="p-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <div className="relative flex items-center">
+          <span className="absolute left-0 h-full flex items-center pl-3 pointer-events-none">
+            <Search className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
+          </span>
           <input
             type="text"
             placeholder="Search chats..."
             onChange={(e) => debouncedSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 bg-transparent border border-[#23232a] rounded-lg focus:outline-none text-[var(--gemini-text-primary)] placeholder-[#b0b3b8] focus:ring-2 focus:ring-[#8ab4f8] focus:border-transparent"
+            style={{ minHeight: 40 }}
           />
+        </div>
+        {/* Mobile dark/light mode toggle below search, only visible on mobile */}
+        <div className="flex items-center justify-end mt-4 lg:hidden">
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 flex items-center gap-2 hover:bg-[#23232a] rounded-lg transition-colors"
+            title={isDarkMode ? 'Light mode' : 'Dark mode'}
+            aria-label="Toggle dark mode"
+          >
+            {isDarkMode ? (
+              <Sun className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
+            ) : (
+              <Moon className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
+            )}
+            <span className="text-xs text-[var(--gemini-text-secondary)]">
+              {isDarkMode ? 'Light' : 'Dark'}
+            </span>
+          </button>
         </div>
       </div>
       
@@ -125,7 +147,7 @@ export function Sidebar() {
             ))}
           </div>
         ) : filteredChatrooms.length === 0 ? (
-          <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+          <div className="p-4 text-center text-[var(--gemini-text-secondary)]">
             {searchQuery ? 'No chats found' : 'No chats yet'}
           </div>
         ) : (
@@ -133,31 +155,31 @@ export function Sidebar() {
             {filteredChatrooms.map((chatroom) => (
               <div
                 key={chatroom.id}
-                onClick={() => setCurrentChatroom(chatroom.id)}
+                onClick={() => { setCurrentChatroom(chatroom.id); if (setMobileSidebarOpen && window.innerWidth < 1024) setMobileSidebarOpen(false); }}
                 className={cn(
                   "group relative flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors",
                   currentChatroom === chatroom.id
-                    ? "bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    ? "bg-[var(--gemini-hover)] text-[var(--gemini-text-primary)] shadow-inner"
+                    : "hover:bg-[var(--gemini-hover)] text-[var(--gemini-text-secondary)] hover:text-[var(--gemini-text-primary)]"
                 )}
               >
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-medium text-sm">
+                  <span className="font-medium text-sm" style={{ color: 'var(--gemini-text-primary)' }}>
                     {chatroom.title.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                    <h3 className="font-medium text-[var(--gemini-text-primary)] truncate">
                       {chatroom.title}
                     </h3>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">
+                    <span className="text-xs text-[var(--gemini-text-secondary)] flex-shrink-0 ml-2">
                       {formatDate(chatroom.lastMessageTime)}
                     </span>
                   </div>
                   {chatroom.lastMessage && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+                    <p className="text-sm text-[var(--gemini-text-secondary)] truncate mt-1">
                       {chatroom.lastMessage}
                     </p>
                   )}
@@ -169,16 +191,16 @@ export function Sidebar() {
                       e.stopPropagation()
                       setActiveDropdown(activeDropdown === chatroom.id ? null : chatroom.id)
                     }}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[#23232a] rounded transition-all"
                   >
-                    <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <MoreVertical className="w-4 h-4 text-[var(--gemini-text-secondary)]" />
                   </button>
                   
                   {activeDropdown === chatroom.id && (
-                    <div className="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 min-w-[120px]">
+                    <div className="absolute right-0 top-full mt-1 bg-[#23232a] border border-[#23232a] rounded-lg shadow-lg z-10 min-w-[120px]">
                       <button
                         onClick={(e) => handleDeleteChatroom(chatroom.id, e)}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-[#23232a]/80 rounded-lg"
                       >
                         <Trash2 className="w-4 h-4" />
                         Delete
@@ -196,15 +218,15 @@ export function Sidebar() {
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-medium text-sm">
+            <span className="font-medium text-sm" style={{ color: 'var(--gemini-text-primary)' }}>
               {user?.phone.slice(-2) || 'U'}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+            <p className="text-sm font-medium text-[var(--gemini-text-primary)] truncate">
               {user?.phone || 'User'}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-[var(--gemini-text-secondary)]">
               Online
             </p>
           </div>
