@@ -24,7 +24,7 @@ const otpSchema = z.object({
 type PhoneFormData = z.infer<typeof phoneSchema>
 type OTPFormData = z.infer<typeof otpSchema>
 
-export function LoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = {}) {
+export function LoginForm({ onLoginSuccess, onClose }: { onLoginSuccess?: () => void; onClose?: () => void } = {}) {
   const { user, isLoading, countries, setUser, setLoading, setCountries } = useAuthStore()
   const [step, setStep] = useState<'phone' | 'otp'>('phone')
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
@@ -118,6 +118,7 @@ export function LoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = 
       setLoading(false)
       toast.success('Login successful!')
       if (onLoginSuccess) onLoginSuccess()
+      if (onClose) onClose()
     }, 2000)
   }
   
@@ -200,25 +201,34 @@ export function LoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = 
                 )}
               </div>
               
-              <button
-                type="submit"
-                disabled={isLoading || !selectedCountry}
-                className={cn(
-                  "w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg",
-                  "hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20",
-                  "disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200",
-                  "flex items-center justify-center gap-2"
-                )}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Sending OTP...
-                  </>
-                ) : (
-                  'Send OTP'
-                )}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  disabled={isLoading || !selectedCountry}
+                  className={cn(
+                    "flex-1 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg",
+                    "hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                    "disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200",
+                    "flex items-center justify-center gap-2"
+                  )}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Sending OTP...
+                    </>
+                  ) : (
+                    'Send OTP'
+                  )}
+                </button>
+                {/* <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-0 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200"
+                >
+                  Close
+                </button> */}
+              </div>
             </form>
           ) : (
             <div className="space-y-6">
@@ -242,25 +252,34 @@ export function LoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = 
                 />
               </div>
               
-              <button
-                onClick={handleOTPSubmit}
-                disabled={isLoading || otpValue.some(digit => !digit)}
-                className={cn(
-                  "w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg",
-                  "hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20",
-                  "disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200",
-                  "flex items-center justify-center gap-2"
-                )}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Verifying...
-                  </>
-                ) : (
-                  'Verify & Continue'
-                )}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleOTPSubmit}
+                  disabled={isLoading || otpValue.some(digit => !digit)}
+                  className={cn(
+                    "flex-1 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg",
+                    "hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                    "disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200",
+                    "flex items-center justify-center gap-2"
+                  )}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    'Verify & Continue'
+                  )}
+                </button>
+                {/* <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-0 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200"
+                >
+                  Close
+                </button> */}
+              </div>
               
               <div className="text-center">
                 <button

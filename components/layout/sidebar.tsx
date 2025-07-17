@@ -8,7 +8,9 @@ import { formatDate, generateId } from '@/lib/utils'
 import { Chatroom } from '@/types'
 import { LoginForm } from '@/components/auth/login-form'
 
-export function Sidebar() {
+export * from '../chat/sidebar'
+
+function Sidebar() {
   const { 
     chatrooms, 
     currentChatroom, 

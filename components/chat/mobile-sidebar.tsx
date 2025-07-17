@@ -7,9 +7,10 @@ import { cn } from '@/lib/utils'
 interface MobileSidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  onRequireLogin?: () => void;
 }
 
-export function MobileSidebar({ isOpen, setIsOpen }: MobileSidebarProps) {
+export function MobileSidebar({ isOpen, setIsOpen, onRequireLogin }: MobileSidebarProps) {
   
   return (
     <>
@@ -30,7 +31,7 @@ export function MobileSidebar({ isOpen, setIsOpen }: MobileSidebarProps) {
         )}
       >
         <div className="relative h-full">
-          <Sidebar setMobileSidebarOpen={setIsOpen} />
+          <Sidebar setMobileSidebarOpen={setIsOpen} onRequireLogin={onRequireLogin} />
           <button
             onClick={() => setIsOpen(false)}
             className="absolute top-4 right-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"

@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { Chatroom } from '@/types'
 
-export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open: boolean) => void }) {
+export function Sidebar({ setMobileSidebarOpen, onRequireLogin }: { setMobileSidebarOpen?: (open: boolean) => void; onRequireLogin?: () => void }) {
   const { 
     chatrooms, 
     currentChatroom, 
@@ -39,8 +39,10 @@ export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open
   }, [chatrooms, searchQuery])
   
   const handleNewChat = () => {
-    if (!user) return
-    
+    if (!user) {
+      if (onRequireLogin) onRequireLogin();
+      return;
+    }
     const newChatroom: Chatroom = {
       id: generateId(),
       title: 'New Chat',
@@ -48,7 +50,6 @@ export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open
       createdAt: new Date(),
       userId: user.id
     }
-    
     addChatroom(newChatroom)
     setCurrentChatroom(newChatroom.id)
     if (setMobileSidebarOpen && window.innerWidth < 1024) setMobileSidebarOpen(false);
@@ -85,13 +86,13 @@ export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open
     <Moon className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
   )}
 </button>
-            <button
+            {/* <button
               onClick={handleLogout}
               className="p-2 hover:bg-[#23232a] rounded-lg transition-colors"
               title="Logout"
             >
               <LogOut className="w-5 h-5 text-[var(--gemini-text-secondary)]" />
-            </button>
+            </button> */}
           </div>
         </div>
         
@@ -119,7 +120,7 @@ export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open
           />
         </div>
         {/* Mobile dark/light mode toggle below search, only visible on mobile */}
-        <div className="flex items-center justify-end mt-4 lg:hidden">
+        {/* <div className="flex items-center justify-end mt-4 lg:hidden">
           <button
             onClick={toggleDarkMode}
             className="p-2 flex items-center gap-2 hover:bg-[#23232a] rounded-lg transition-colors"
@@ -135,7 +136,7 @@ export function Sidebar({ setMobileSidebarOpen }: { setMobileSidebarOpen?: (open
               {isDarkMode ? 'Light' : 'Dark'}
             </span>
           </button>
-        </div>
+        </div> */}
       </div>
       
       {/* Chat List */}
