@@ -152,7 +152,7 @@ export const useChatStore = create<ChatState>()(
         chatrooms: state.chatrooms, 
         messages: state.messages,
         isDarkMode: state.isDarkMode 
-      })
+      }) as any
     }
   )
 )
