@@ -62,7 +62,7 @@ export function OTPInput({ value, onChange, length = 6, disabled }: OTPInputProp
       {Array(length).fill(0).map((_, index) => (
         <input
           key={index}
-          ref={(el) => inputRefs.current[index] = el}
+          ref={el => { inputRefs.current[index] = el; }}
           type="text"
           inputMode="numeric"
           maxLength={1}
