@@ -16,6 +16,27 @@ This project simulates a Gemini-style conversational AI chat app with OTP login,
 
 ---
 
+## 🧭 Navigation & Login Flow
+
+- **Initial Load:**
+  - When the application starts, users are immediately presented with the chat interface, regardless of authentication status. There is no forced redirect to a login page.
+
+- **Starting a New Chat:**
+  - If a user clicks the "New Chat" button in the sidebar and is **not logged in**, a login modal appears.
+  - The rest of the chat UI remains visible in the background.
+
+- **Login Process:**
+  - The login modal asks for a phone number and country code.
+  - After submitting, the user is prompted to enter a 6-digit OTP (One-Time Password).
+  - **For demo purposes, the OTP is always `123456`** (this is clearly indicated in the modal).
+  - Upon entering the correct OTP, the user is authenticated and a new chat is automatically created and selected.
+
+- **Subsequent Navigation:**
+  - Once logged in, users can create new chats, send messages, and use all features without interruption.
+  - Logging out (if implemented) will require login again for new chats.
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
